@@ -1,5 +1,5 @@
-  output_dir: data/out
-  images: images
+  output_dir: /fs/scratch/PAS3328/michaeldavidson/scAtlasTb_outputs/out
+  images: /fs/scratch/PAS3328/michaeldavidson/scAtlasTb_outputs/images
   use_gpu: false
 
   env_mode: local
@@ -31,6 +31,8 @@
         raw_counts: layers/counts
         norm_counts: layers/normcounts
         batch: batch
+        var_mask:
+          - highly_variable
         methods:
           unintegrated:
           bbknn:
