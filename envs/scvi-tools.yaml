@@ -1,6 +1,5 @@
 name: scvi-tools
 channels:
-  - nvidia
   - pytorch
   - conda-forge
 dependencies:
@@ -16,8 +15,8 @@ dependencies:
   # - cuda-version>12.1
   # - cuda-nvcc>12.1
   - pytorch>=2.2
-  - jaxlib=*=*cuda*
-  - pytorch-cuda=12.1  # <-- THIS guarantees GPU build
+  - jaxlib=*=*cpu*
+  - cpuonly  # forces CPU pytorch (replaces pytorch-cuda=12.1)
   - scvi-tools>=1.3.0
   - pip
   - pip:
