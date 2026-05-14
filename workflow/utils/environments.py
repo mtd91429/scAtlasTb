@@ -22,7 +22,7 @@ def get_env(
         # Return absolute env directory path (not bare name) so snakemake's
         # `conda:` directive activates the env's python for `script:` rules.
         # Bare names trigger a log line but don't actually switch pythons.
-        envs_dir = '/fs/ess/PAS3328/count2atlas_eval/conda_envs'
+        envs_dir = '/fs/ess/PAS3328/count2atlas/conda_envs'
         return os.path.join(envs_dir, env_name)
     else:
         raise ValueError(f'Unknown environment mode: {mode}')
