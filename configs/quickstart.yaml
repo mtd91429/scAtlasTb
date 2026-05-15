@@ -1,5 +1,5 @@
-  output_dir: /fs/scratch/PAS3328/michaeldavidson/scAtlasTb_outputs/out
-  images: /fs/scratch/PAS3328/michaeldavidson/scAtlasTb_outputs/images
+  output_dir: /fs/scratch/PAS3328/michaeldavidson/scAtlasTb_outputs/quickstart/out
+  images: /fs/scratch/PAS3328/michaeldavidson/scAtlasTb_outputs/quickstart/images
   use_gpu: false
 
   env_mode: local
