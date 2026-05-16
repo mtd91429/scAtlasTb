@@ -92,6 +92,8 @@ model = scvi.model.SCVI(
 )
 
 logging.info(f'Train scVI with parameters:\n{pformat(train_scvi)}')
+# n_samples_per_label is SCANVI-only; strip from SCVI pretraining kwargs
+train_scvi.pop('n_samples_per_label', None)
 model.train(**train_scvi)
 
 plot_model_history(
