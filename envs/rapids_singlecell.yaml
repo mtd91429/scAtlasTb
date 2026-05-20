@@ -1,9 +1,6 @@
 name: rapids_singlecell
 channels:
-  - rapidsai
-  - nvidia
   - conda-forge
-  - bioconda
 dependencies:
   - python=3.11
   - anndata=0.11
@@ -11,17 +8,16 @@ dependencies:
   - leidenalg
   - louvain
   - zarr
-  - cuda-version=12
-  - rapids=25.10
-  - scikit-learn<1.6 # required by dask-ml
-  - scipy<1.15
   - dask
   - dask-ml
   - pandas<3
-  - pytorch
-  - harmonypy
-  - harmony-pytorch
+  - scipy<1.15
+  - scikit-learn<1.6  # required by dask-ml
+  - harmonypy<0.1.0   # >=0.1.0 breaks scanpy.external.pp.harmony_integrate (scanpy issue #3940)
   - pip
   - pip:
-    - rapids-singlecell
-    - scikit-learn<1.6
+    - --extra-index-url https://download.pytorch.org/whl/cu130
+    - --extra-index-url https://pypi.nvidia.com
+    - torch>=2.5
+    - rapids-singlecell-cu13[rapids]
+    - harmony-pytorch
