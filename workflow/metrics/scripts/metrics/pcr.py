@@ -37,6 +37,10 @@ def pcr_comparison(adata, output_type, batch_key, label_key, adata_raw, n_thread
 def pcr_y(adata, output_type, batch_key, label_key, adata_raw, **kwargs):
     import scib_metrics
 
+    print(f'[pcr_y debug] adata_raw   = {adata_raw}', flush=True)
+    print(f'[pcr_y debug] adata_raw.X = {type(adata_raw.X).__name__ if adata_raw.X is not None else "None"}', flush=True)
+    print(f'[pcr_y debug] adata.obsm  = {list(adata.obsm.keys())}', flush=True)
+
     if output_type == 'knn':
         return np.nan
     
