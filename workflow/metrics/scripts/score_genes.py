@@ -64,10 +64,9 @@ if 'feature_name' in adata.var.columns:
     adata.var_names = adata.var['feature_name'].astype(str).values
 
 all_obs_names = adata.obs_names.copy()
-all_var_names = adata.var_names.copy()
 # feature_name can be non-unique (CxG feature collisions); use unique feature_id for the
 # var subset_mask so duplicate columns dropped during dedup aren't double-counted.
-all_var_ids = adata.var['feature_id'].copy() if 'feature_id' in adata.var.columns else all_var_names
+all_var_ids = adata.var['feature_id'].copy() if 'feature_id' in adata.var.columns else adata.var_names.copy()
 
 logging.debug('Parse gene sets...')
 logging.debug(f'Initial gene sets: {gene_sets}')
