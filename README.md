@@ -1,9 +1,10 @@
 # Single Cell Atlasing Toolbox 🧰
 
 [![Documentation][badge-docs]][documentation]
+[![Tests][badge-tests]][tests]
 
-[badge-tests]: https://img.shields.io/github/actions/
-[badge-docs]: https://img.shields.io/readthedocs/scAtlasTb-utils
+[badge-tests]: https://img.shields.io/github/actions/workflow/status/HCA-integration/scAtlasTb/test.yaml?label=tests
+[badge-docs]: https://readthedocs.org/projects/scatlastb/badge/?version=latest
 
 **Toolbox of Snakemake pipelines for easy-to-use analyses and benchmarks for building integrated atlases**
 
@@ -137,9 +138,9 @@ total                                     31
 Reasons:
     (check individual jobs above for details)
     input files updated by another job:
-        integration_all, integration_barplot_per_dataset, integration_benchmark_per_dataset, integration_compute_umap, integration_plot_umap, integration_postprocess, integration_prepare, integration_run_method, preprocessing_assemble, preprocessing_highly_variable_genes, preprocessing_pca                                                                                             
+        integration_all, integration_barplot_per_dataset, integration_benchmark_per_dataset, integration_compute_umap, integration_plot_umap, integration_postprocess, integration_prepare, integra[...]
     missing output files:
-        integration_benchmark_per_dataset, integration_compute_umap, integration_postprocess, integration_prepare, integration_run_method, preprocessing_assemble, preprocessing_highly_variable_genes, preprocessing_normalize, preprocessing_pca
+        integration_benchmark_per_dataset, integration_compute_umap, integration_postprocess, integration_prepare, integration_run_method, preprocessing_assemble, preprocessing_highly_variable_ge[...]
 
 This was a dry-run (flag -n). The order of jobs does not reflect the order of execution.
 ```
@@ -156,8 +157,19 @@ If you found a bug, please use the [issue tracker][].
 
 ## Citation
 
-> t.b.a
+```bibtex
+@article {Mueller2026.07.30.741695,
+	author = {Mueller, Michaela F. and Cujba, Ana-Maria and Romanovskaia, Daria and Cohen, Carla J. and Bright, Chelsea A. and Lance, Christopher and Ram{\'\i}rez-Su{\'a}stegui, Ciro and Strobl, Daniel C. and Yuan, Hao and Hulsen, Janneke and Naas, Julia and Limbeck, Katharina and Kock, Kian Hong and Halle, Lennard and Knoll, Rainer and Kfuri-Rubens, Raphael and Aguilar-Fern{\'a}ndez, Sergio and Parikh, Shrey and Shitov, Vladimir A. and Said, Wamia and Kasper, Maria and Snelling, Sarah J. B. and Teichmann, Sarah A. and Reynolds, Gary and Prabhakar, Shyam and Villani, Alexandra-Chloe and Theis, Fabian J. and Luecken, Malte D.},
+	title = {Building optimized single-cell reference atlases with scAtlasTb},
+	year = {2026},
+	doi = {10.64898/2026.07.30.741695},
+	publisher = {Cold Spring Harbor Laboratory},
+	URL = {https://www.biorxiv.org/content/early/2026/08/02/2026.07.30.741695},
+	journal = {bioRxiv}
+}
+```
 
 [issue tracker]: https://github.com/HCA-integration/scAtlasTb/issues
+[tests]: https://github.com/HCA-integration/scAtlasTb/actions/workflows/test.yaml
 [documentation]: https://scatlastb.readthedocs.io
 [changelog]: https://scatlastb-utils.readthedocs.io/en/latest/changelog.html
