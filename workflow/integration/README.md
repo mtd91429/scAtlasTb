@@ -102,6 +102,16 @@ DATASETS:
           sigma: 0.1
           batch_key: batch_2
           n_comps: 30
+
+        # STACAS, runs in R: raw_counts are log-normalized on all genes (Seurat's LogNormalize),
+        # then subset to var_mask; see scripts/methods/stacas.py for all hyperparameters
+        stacas:
+          dims: 30
+          anchor_features:  # optional: a number lets STACAS select its own genes instead of var_mask
+            -
+            - 1000
+          cell_labels: bulk_labels  # optional: semi-supervised with these labels (NaN = unlabelled)
+          k_anchor: 5  # Run.STACAS() argument k.anchor (underscores stand for dots)
 ```
 
 ### Module specification
@@ -160,6 +170,7 @@ The best way to get started, is to look at one of the scripts (ideally one that 
 
 Additionally, you might want to add a new conda environment YAML file, if the new integration requires different dependencies than what is already provided in `envs`.
 The new environment must then be specified in `params.tsv` and must be installed if you're using the default running mode of the pipeline.
+If a dependency is not available from conda channels, install it with a `<environment>.post-deploy.sh` script next to the YAML file (e.g. `envs/stacas.post-deploy.sh`): Snakemake runs it after creating an environment from its YAML file, and `envs/install_environment.sh` runs it for locally installed environments.
 
 Once you have implemented the new integration method, you can test if the the method gets recognised via a dry run. See below about testing.
 

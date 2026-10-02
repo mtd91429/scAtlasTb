@@ -34,3 +34,12 @@ conda env create -f envs/snakemake.yaml
 ```
 
 You can install the other environments as needed, for different parts of the workflow (modules, rules).
+Some environments need a dependency that is not available from conda channels (e.g. STACAS in `envs/stacas.yaml`).
+These come with a post-deploy script next to their YAML file (`envs/<environment>.post-deploy.sh`) that installs the missing package into the environment.
+`envs/install_environment.sh` runs it after creating the environment, and so does Snakemake when it creates environments from the YAML files (`env_mode: from_yaml`).
+If you create such an environment yourself, run the script inside it:
+
+```
+conda env create -f envs/stacas.yaml
+conda run -n stacas bash envs/stacas.post-deploy.sh
+```

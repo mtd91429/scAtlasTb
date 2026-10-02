@@ -31,6 +31,7 @@ defaults:
     - scvi_tools
     - drvi
     - sysvi
+    - stacas
 
 
 DATASETS:
@@ -250,3 +251,23 @@ DATASETS:
         - bulk_labels
         - phase
         - percent_mito
+
+  stacas:
+    input:
+      integration: test/input/pbmc68k.h5ad
+    integration:
+      threads: 2
+      label: bulk_labels
+      batch: batch
+      methods:
+        stacas:
+          dims: 20
+          anchor_features:
+            -  # default: the integration features (var_mask)
+            - 500  # STACAS selects 500 genes itself, excluding its gene block list
+          cell_labels:
+            -  # unsupervised
+            - na_column  # semi-supervised; missing labels (Dendritic) count as unlabelled
+      umap_colors:
+        - batch
+        - bulk_labels

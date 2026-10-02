@@ -1,0 +1,34 @@
+name: stacas
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  # Python side: read the prepared zarr, write the integration output
+  - python=3.11
+  - anndata=0.11
+  - scanpy=1.11
+  - zarr<3
+  - pandas<3
+  # dask-core: next to r-base the `dask` metapackage resolves to a 2023 release that fails with numpy 2
+  - dask-core
+  - sparse
+  - scipy<1.17
+  - h5py
+  # R side: Seurat v5 and the dependencies of STACAS; data exchange through HDF5
+  - r-base=4.5
+  - r-seurat=5.5
+  - r-seuratobject=5
+  - r-matrix
+  - r-hdf5r
+  - r-jsonlite
+  - r-data.table
+  - r-pbapply
+  - r-ggridges
+  - r-colorspace
+  - r-r.utils
+  - r-ggplot2
+  - r-remotes
+  - bioconductor-biocneighbors
+  - bioconductor-biocparallel
+  # STACAS itself is not on conda-forge or bioconda: stacas.post-deploy.sh installs
+  # the pinned GitHub release into this environment

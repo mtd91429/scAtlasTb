@@ -54,3 +54,13 @@ echo "$operation $ENV from $FILE..."
 if $EXECUTE; then
     $CONDA_CMD env $operation $QUIET --file $FILE
 fi
+
+# Dependencies that are not available from conda channels are installed by a post-deploy
+# script next to the YAML file, which Snakemake also runs for environments created from YAML
+POST_DEPLOY="${FILE%.yaml}.post-deploy.sh"
+if [[ -f $POST_DEPLOY ]]; then
+    echo "run $POST_DEPLOY in $ENV..."
+    if $EXECUTE; then
+        $CONDA_CMD run --live-stream -n $ENV bash $POST_DEPLOY
+    fi
+fi
