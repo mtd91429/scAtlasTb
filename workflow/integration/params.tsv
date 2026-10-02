@@ -12,4 +12,5 @@ scvi_vitkl	embed	false	true	scvi-vitkl	gpu
 drvi	embed	false	true	scvi-tools	gpu		
 scpoli	embed	true	false	scarches	gpu	scarches	conditions,unknown_ct_names,labeled_indices,hidden_layer_sizes
 scgen	embed,full	true	false	scarches	gpu	scarches	hidden_layer_sizes
+stacas	embed	false	false	stacas	cpu		
 sysvi	embed	false	true	scvi-tools	gpu		
