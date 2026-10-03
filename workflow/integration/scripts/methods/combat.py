@@ -59,6 +59,7 @@ write_zarr_linked(
     adata,
     input_file,
     output_file,
-    files_to_keep=['X', 'var', 'uns'],
+    # keep obsm so that the input's X_pca, which remove_slots dropped, is not linked back in
+    files_to_keep=['X', 'obsm', 'var', 'uns'],
     subset_mask=(None, var_mask) if subsetted else None,
 )
