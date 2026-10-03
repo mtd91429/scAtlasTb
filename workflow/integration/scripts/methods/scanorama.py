@@ -61,6 +61,7 @@ clean_categorical_column(adata, batch_key)
 # subset features
 adata, _ = subset_hvg(adata, var_column='integration_features')
 
+var_names = adata.var_names.copy()
 batch_categories = adata.obs[batch_key].unique().tolist()
 adatas = [
     adata[adata.obs[batch_key] == batch].copy()
@@ -80,6 +81,9 @@ adata = merge_adata(
     keys=batch_categories,
     index_unique=None
 )
+# restore the input gene order: scanorama returns its genes sorted alphabetically,
+# but layers/raw/varm are linked from the input, so columns must match its order
+adata = adata[:, var_names].copy()
 
 # save full feature output
 # adata.obsm["X_full"] = adata.X
