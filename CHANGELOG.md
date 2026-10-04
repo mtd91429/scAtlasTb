@@ -1,5 +1,13 @@
 # Changelog
 
+## 04.10.2026 scDblFinder in the doublets module
+
+New method `scdblfinder` in the `doublets` module: [scDblFinder](https://bioconductor.org/packages/scDblFinder) (Bioconductor), run in R with one `scDblFinder()` call per batch (new environment `envs/scdblfinder.yaml`, R 4.5 and scDblFinder 1.24).
+
+- `methods` can also be a mapping of method names to parameters. Parameters of `scdblfinder` are passed to `scDblFinder()` under their R names (e.g. `dbr.sd`); the other methods take none.
+- Output: `scdblfinder_score` and `scdblfinder_prediction` (`doublet` or `singlet`) in `.obs`.
+- Unknown method names in `methods` now raise an error instead of being ignored.
+
 ## 03.10.2026 Ambient RNA removal module
 
 New module `ambient_rna` that removes ambient RNA from the counts of called cells, per library, from the raw (unfiltered) droplet matrices.
