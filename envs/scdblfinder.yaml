@@ -1,0 +1,23 @@
+name: scdblfinder
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  # Python side: read the input, write the doublet calls
+  - python=3.11
+  - anndata=0.11
+  - zarr<3
+  - pandas<3
+  # dask-core: next to r-base the `dask` metapackage resolves to a 2023 release that fails with numpy 2
+  - dask-core
+  - sparse
+  - scipy<1.17
+  - h5py
+  - tqdm
+  # R side: scDblFinder (Bioconductor 3.22); data exchange through HDF5
+  - r-base=4.5
+  - bioconductor-scdblfinder=1.24
+  - bioconductor-singlecellexperiment
+  - r-matrix
+  - r-hdf5r
+  - r-jsonlite

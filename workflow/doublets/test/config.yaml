@@ -23,9 +23,23 @@ DATASETS:
       methods:
         - scrublet
         - doubletdetection
+        - scdblfinder
+
+  test_scdblfinder:
+    input:
+      doublets:
+        test: test/input/pbmc68k.h5ad
+    doublets:
+      counts: layers/counts
+      methods:
+        scrublet:
+        scdblfinder:
+          seed: 1
+          dbr.per1k: 0.008  # scDblFinder() argument under its R name: expected doublet rate per 1,000 cells
 
 
 defaults:
   datasets:
     - test
+    - test_scdblfinder
     - Lee2020

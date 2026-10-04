@@ -7,6 +7,7 @@ from utils.io import read_anndata, link_zarr, write_zarr_linked, ALL_SLOTS
 input_anndata = snakemake.input[0]
 input_scrublet = snakemake.input.get('scrublet')
 input_doubletdetection = snakemake.input.get('doubletdetection')
+input_scdblfinder = snakemake.input.get('scdblfinder')
 output_zarr = snakemake.output.zarr
 layer = snakemake.params.get('layer', 'X')
 
@@ -23,6 +24,9 @@ if adata.n_obs == 0:
             adata.obs[col] = pd.NA
     if input_doubletdetection:
         for col in pd.read_table(input_doubletdetection, index_col=0).columns:
+            adata.obs[col] = pd.NA
+    if input_scdblfinder:
+        for col in ['scdblfinder_score', 'scdblfinder_prediction']:
             adata.obs[col] = pd.NA
     write_zarr_linked(
         adata,
@@ -45,6 +49,12 @@ if input_doubletdetection:
     doub_scores.index = doub_scores.index.astype(str)
     print(doub_scores)
     adata.obs = adata.obs.merge(doub_scores, left_index=True, right_index=True, how='left')
+
+if input_scdblfinder:
+    scdbl_scores = pd.concat([pd.read_table(f, index_col=0) for f in input_scdblfinder])
+    scdbl_scores.index = scdbl_scores.index.astype(str)
+    print(scdbl_scores)
+    adata.obs = adata.obs.merge(scdbl_scores, left_index=True, right_index=True, how='left')
 
 print(adata.obs)
 
