@@ -8,6 +8,7 @@ Data preparation
    preprocessing
    label_harmonization
    celltype_prediction
+   ambient_rna
    doublets
    qc
    batch_analysis

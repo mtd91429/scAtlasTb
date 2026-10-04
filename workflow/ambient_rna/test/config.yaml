@@ -1,0 +1,43 @@
+output_dir: test/out
+images: test/images
+
+use_gpu: false
+
+DATASETS:
+  test:
+    input:
+      ambient_rna:
+        cells: test/input/cells.h5ad
+    ambient_rna:
+      counts: layers/counts
+      batch: batch
+      raw_file: raw_file
+      barcode: barcode
+      gene_id_column: gene_ids
+      methods:
+        cellbender:
+          expected_cells: 300
+          total_droplets_included: 2000
+          epochs: 50
+
+  # zarr input (the output of the dataset above), genes matched by name
+  test_zarr:
+    input:
+      ambient_rna:
+        cells: test/out/ambient_rna/dataset~test/file_id~cells.zarr
+    ambient_rna:
+      counts: layers/counts
+      batch: batch
+      raw_file: raw_file
+      barcode: barcode
+      methods:
+        cellbender:
+          expected_cells: 300
+          total_droplets_included: 2000
+          epochs: 50
+          fpr: 0.05
+
+defaults:
+  datasets:
+    - test
+    - test_zarr
