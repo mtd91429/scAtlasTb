@@ -1,0 +1,16 @@
+name: cellbender
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python=3.11
+  # the bioconda build reports version 0.3.2 (`cellbender --version`), since CellBender's
+  # setuptools-git-versioning falls back to its starting_version without git; the code is 0.4.0
+  - cellbender=0.4.0
+  # conda-forge selects the CUDA build of pytorch when the environment is created on a machine
+  # with an NVIDIA driver (or with CONDA_OVERRIDE_CUDA set), and the CPU build otherwise
+  - pytorch>=2.2
+  - numpy<2.1  # CellBender's own tests pin numpy<2.1
+  - anndata=0.11
+  - pandas<3
+  - scipy<1.17

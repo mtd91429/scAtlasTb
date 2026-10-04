@@ -1,5 +1,14 @@
 # Changelog
 
+## 03.10.2026 Ambient RNA removal module
+
+New module `ambient_rna` that removes ambient RNA from the counts of called cells, per library, from the raw (unfiltered) droplet matrices.
+The first method is [CellBender](https://cellbender.readthedocs.io) `remove-background` (new environment `envs/cellbender.yaml`, CellBender 0.4.0).
+
+- Input: an AnnData object with raw counts, plus `.obs` columns for the library (`batch`), the path to each library's raw droplet matrix (`raw_file`) and the barcodes as they appear in it (`barcode`).
+- One CellBender job per library (GPU).
+- Output: the input object with the corrected counts in `.layers['cellbender']` and CellBender's per-cell estimates (cell probability, background fraction, ...) in `.obs`, plus a per-library summary.
+
 ## 02.04.2026 Metrics prepare optimisation
 
 PR: https://github.com/HCA-integration/scAtlasTb/pull/361

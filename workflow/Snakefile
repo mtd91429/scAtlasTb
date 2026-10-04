@@ -134,6 +134,10 @@ module batch_analysis:
     snakefile: "batch_analysis/Snakefile"
     config: config
 
+module ambient_rna:
+    snakefile: "ambient_rna/Snakefile"
+    config: config
+
 module qc:
     snakefile: "qc/Snakefile"
     config: config
@@ -206,6 +210,7 @@ use rule * from clustering as clustering_ *
 use rule * from exploration as exploration_ *
 use rule * from sample_representation as sample_representation_ *
 use rule * from batch_analysis as batch_analysis_ *
+use rule * from ambient_rna as ambient_rna_ *
 use rule * from doublets as doublets_ *
 use rule * from qc as qc_ *
 use rule * from split_data as split_data_ *

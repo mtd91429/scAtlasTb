@@ -29,6 +29,7 @@ The modules are located under `workflow/` and can be run independently or combin
 | `exploration`          | Exploration and quality control of datasets                               |
 | `batch_analysis`       | Exploration and quality control of batches within datasets                |
 | `qc`                   | Semi-automated quality control of datasets using [sctk AutoQC](https://teichlab.github.io/sctk/notebooks/automatic_qc.html) |
+| `ambient_rna`          | Removing ambient RNA from the counts of each library with [CellBender](https://cellbender.readthedocs.io) |
 | `doublets`             | Identifying and handling doublets in datasets                             |
 | `merge`                | Merging datasets                                                          |
 | `filter`               | Filtering datasets based on specified criteria                            |
