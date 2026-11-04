@@ -1,16 +1,17 @@
 # Doublet detection
 
-This module runs per-batch doublet detection using one or more callers (currently `scrublet`, `doubletdetection` and `scdblfinder`). The pipeline runs doublet callers within each library/batch and writes scores and predictions back into the AnnData object.
+This module runs per-batch doublet detection using one or more callers (currently [`scrublet`](https://github.com/swolock/scrublet), [`doubletdetection`](https://github.com/JonathanShor/DoubletDetection) and [`scdblfinder`](https://bioconductor.org/packages/scDblFinder)). The pipeline runs doublet callers within each library/batch and writes scores and predictions back into the AnnData object.
 
 ## Environments
 
 The following environments are useful for running the module. Install only the ones you need.
 
-- [`scanpy`](https://github.com/HCA-integration/scAtlasTb/blob/main/envs/scanpy.yaml)
-- [`qc`](https://github.com/HCA-integration/scAtlasTb/blob/main/envs/qc.yaml) for `scrublet` (or `rapids_singlecell` with `use_gpu: true`) and `doubletdetection`
+- [`scanpy`](https://github.com/HCA-integration/scAtlasTb/blob/main/envs/scanpy.yaml): splitting batches and collecting results
+- [`qc`](https://github.com/HCA-integration/scAtlasTb/blob/main/envs/qc.yaml): running `scrublet` and `doubletdetection`
 - [`scdblfinder`](https://github.com/HCA-integration/scAtlasTb/blob/main/envs/scdblfinder.yaml) for `scdblfinder` (Python, R 4.5 and [scDblFinder](https://bioconductor.org/packages/scDblFinder) 1.24 from Bioconductor)
+- [`rapids_singlecell`](https://github.com/HCA-integration/scAtlasTb/blob/main/envs/rapids_singlecell.yaml) (optional): GPU-accelerated `scrublet` when `use_gpu: true` is set for the dataset
 
-# Configuration
+## Configuration
 
 ```yaml
 DATASETS:
@@ -61,6 +62,7 @@ defaults:
   Parameters are only supported for `scdblfinder`:
   * `seed`: random seed, set before each batch. Default: `0`.
   * any other key is passed to [`scDblFinder()`](https://bioconductor.org/packages/scDblFinder) under its R name (e.g. `dbr`, `dbr.sd`, `clusters`, `nfeatures`), with scDblFinder's defaults otherwise (random artificial doublets, expected doublet rate of 0.8% per 1,000 cells).
+* `use_gpu`: Whether to run `scrublet` with `rapids_singlecell` on GPU. Default: `false`.
 
 > Note: `counts` is resolved relative to the input object (e.g., anndata.X or anndata.layers). Methods are run per-batch; choose `batch` to reflect library-level grouping so cross-library doublets are not considered.
 
@@ -68,9 +70,9 @@ defaults:
 
 ## Output
 
-Results are written into the AnnData `.obs` and to summary files/plots:
+Results are written into the AnnData `.obs`:
 
-* `<out_dir>/doublets/dataset~<datasets>/file_id~<file_id>.zarr` — Updated AnnData with caller-specific score and prediction columns in `.obs`, for example:
+* `<out_dir>/doublets/dataset~<dataset>/file_id~<file_id>.zarr` — Updated AnnData with caller-specific score and prediction columns in `.obs`:
   - scrublet:
     - `scrublet_score`
     - `scrublet_prediction`
@@ -80,7 +82,6 @@ Results are written into the AnnData `.obs` and to summary files/plots:
   - scdblfinder:
     - `scdblfinder_score`: scDblFinder's doublet score (`scDblFinder.score`)
     - `scdblfinder_prediction`: `doublet` or `singlet` (`scDblFinder.class`)
-* `<image_dir>/doublets/dataset~<datasets>/file_id~<file_id>/doublet_summary.tsv` — Summary table with per-batch and per-method statistics.
-* `<image_dir>/doublets/dataset~<datasets>/file_id~<file_id>/plots/` — Visualizations of score distributions and per-batch results (e.g., histograms, per-batch summary plots).
+* `<out_dir>/doublets/scatter/dataset~<dataset>/file_id~<file_id>/<method>/<group>.tsv` — Intermediate scores and predictions of each caller per group of batches (`group_<i>`, or `no_batch` if no batch key is given; batches are grouped according to `chunk_size`).
 
-If additional callers are enabled, corresponding score/prediction columns will be added to `.obs` using method-specific names to avoid collisions.
+Batches with fewer than 100 cells are skipped and receive a score and prediction of `0`.

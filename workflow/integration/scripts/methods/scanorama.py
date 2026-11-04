@@ -63,6 +63,7 @@ clean_categorical_column(adata, batch_key)
 # subset to match the written X and var
 var_mask = adata.var['integration_features'].to_numpy(dtype=bool)
 adata, subsetted = subset_hvg(adata, var_column='integration_features')
+var = adata.var.copy()
 
 obs_names = adata.obs_names.copy()
 var_names = adata.var_names.copy()
@@ -91,6 +92,8 @@ adata = adata[obs_names].copy()
 # restore the input gene order: scanorama returns its genes sorted alphabetically,
 # but layers/raw/varm are linked from the input, so columns must match its order
 adata = adata[:, var_names].copy()
+# anndata.concat drops var columns, restore them
+adata.var = var.loc[adata.var_names]
 
 # save full feature output
 # adata.obsm["X_full"] = adata.X
