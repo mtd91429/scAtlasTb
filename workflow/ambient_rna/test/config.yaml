@@ -37,7 +37,26 @@ DATASETS:
           epochs: 50
           fpr: 0.05
 
+  # per-batch arguments from a table: batch1 2,500 droplets and 30 epochs, batch2 40 epochs
+  test_batch_args:
+    input:
+      ambient_rna:
+        cells: test/input/cells.h5ad
+    ambient_rna:
+      counts: layers/counts
+      batch: batch
+      raw_file: raw_file
+      barcode: barcode
+      gene_id_column: gene_ids
+      methods:
+        cellbender:
+          expected_cells: 300
+          total_droplets_included: 2000
+          epochs: 50
+          batch_args: test/input/batch_args.tsv
+
 defaults:
   datasets:
     - test
     - test_zarr
+    - test_batch_args

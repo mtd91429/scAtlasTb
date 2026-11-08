@@ -47,6 +47,13 @@ DATASETS:
 * `gene_id_column`: Column in `.var` with the feature IDs of the raw matrix (e.g. Ensembl IDs). If not set, the index of `.var` is used. Genes are matched to the IDs of the raw matrix, or else to its feature names after making them unique like `var_names_make_unique`. Every gene of the input must be found.
 * `methods`: Ambient RNA removal methods to run, either a list of method names or a mapping of method names to their parameters. Default: `cellbender`.
   * `cellbender`: parameters of `cellbender remove-background`, with underscores or dashes (e.g. `epochs`, `expected_cells`, `total_droplets_included`, `fpr`, `learning_rate`; see `cellbender remove-background --help`). Use `true` for flags without value. `input`, `output` and `cuda` are set by the pipeline (`--cuda` when `use_gpu: true` and a GPU is available), and only one `fpr` value is supported.
+    * `batch_args` (optional): path to a tab-separated table with a column `batch` (the values of the `batch` column in `.obs`) and one column per parameter, which sets parameters per library and takes precedence over the ones above. Empty cells, and libraries missing from the table, keep the parameters above. Useful because CellBender's automatic guesses of `expected_cells` and `total_droplets_included` can fail on libraries with many debris droplets; a rule can then set them from each library's own count distribution, e.g.:
+
+      ```
+      batch	expected_cells	total_droplets_included
+      lib1	5000	30000
+      lib2	8000	45000
+      ```
 
 ## Output
 
@@ -58,7 +65,7 @@ DATASETS:
     * `cellbender_cell_size`, `cellbender_droplet_efficiency`: CellBender's estimates of the cell's true size and of the droplet's capture efficiency;
     * `cellbender_analyzed`: whether CellBender analyzed the barcode. Cells that CellBender did not analyze (because they are not among the `total_droplets_included` barcodes with the most counts, or not in the raw matrix) have missing values in the columns above and keep their raw counts;
     * `cellbender_removed_fraction`: fraction of the cell's counts in the input genes that was removed.
-* `<image_dir>/ambient_rna/dataset~<dataset>/file_id~<file_id>/summary.tsv` — per library: number of cells, cells not analyzed, cells that CellBender also calls, median cell probability and the fraction of counts removed from the analyzed cells.
+* `<image_dir>/ambient_rna/dataset~<dataset>/file_id~<file_id>/summary.tsv` — per library: number of cells, cells not analyzed, cells that CellBender also calls, median cell probability, the fraction of counts removed from the analyzed cells, and the parameters CellBender ran with (`cellbender_args`, JSON).
 * `<out_dir>/ambient_rna/scatter/dataset~<dataset>/file_id~<file_id>/cellbender/<batch>/` — CellBender's own output per library: full (`cellbender.h5`) and cell-only (`cellbender_filtered.h5`) count matrices, a summary report (`cellbender.pdf`, `cellbender_report.html`), metrics (`cellbender_metrics.csv`), the log and the checkpoint (`ckpt.tar.gz`), from which a rerun resumes.
 
 > Note: CellBender writes no counts for droplets that it does not call as cells (`cellbender_cell_probability` ≤ 0.5), so such cells are all-zero in `.layers['cellbender']` (`cellbender_removed_fraction` = 1).
@@ -69,7 +76,7 @@ To use the corrected counts downstream, point the next module to the layer, e.g.
 
 ## Test
 
-The test data in `test/input` are synthetic (`test/generate_test_data.py`): two libraries of 300 cells, whose counts are 10% ambient RNA, and 7,700 empty droplets.
+The test data in `test/input` are synthetic (`test/generate_test_data.py`): two libraries of 300 cells, whose counts are 10% ambient RNA, and 7,700 empty droplets. `test/input/batch_args.tsv` sets parameters per library for the dataset `test_batch_args`.
 The test runs CellBender on CPU:
 
 ```commandline

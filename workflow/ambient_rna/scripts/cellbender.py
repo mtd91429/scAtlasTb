@@ -3,6 +3,7 @@ Run CellBender remove-background on the raw droplet matrix of one batch
 """
 import logging
 logging.basicConfig(level=logging.INFO)
+import json
 import shlex
 import subprocess
 from pathlib import Path
@@ -52,6 +53,9 @@ for key, value in args.items():
 
 # CellBender writes its checkpoint (ckpt.tar.gz) to the working directory, from which a rerun resumes
 output_h5.parent.mkdir(parents=True, exist_ok=True)
+# the arguments this batch ran with, for the per-batch summary
+with open(output_h5.parent / 'cellbender_args.json', 'w') as f:
+    json.dump({**args, 'cuda': use_cuda}, f, sort_keys=True)
 logging.info(f'Batch "{batch_info["batch"]}" ({batch_info["n_cells"]} cells in the input)')
 logging.info(f'Run in {output_h5.parent}:\n{shlex.join(cmd)}')
 subprocess.run(cmd, check=True, cwd=output_h5.parent)
