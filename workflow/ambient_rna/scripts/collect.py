@@ -29,6 +29,12 @@ LATENTS = ['cell_probability', 'background_fraction', 'cell_size', 'droplet_effi
 CELL_PROBABILITY_CUTOFF = 0.5  # CellBender's cell call
 
 
+def read_args(file):
+    """The arguments CellBender ran with for a batch (written beside its output), as JSON text"""
+    args_file = Path(file).parent / 'cellbender_args.json'
+    return args_file.read_text().strip() if args_file.exists() else ''
+
+
 def read_cellbender_h5(file):
     """Read corrected counts (barcodes x features) and latent variables from a CellBender output file"""
     with h5py.File(file, 'r') as f:
@@ -132,6 +138,7 @@ for batch_file in batch_files:
         'counts_raw': raw_total,
         'counts_corrected': block.sum(),
         'fraction_removed': 1 - block.sum() / raw_total if raw_total > 0 else np.nan,
+        'cellbender_args': read_args(file),
     })
 
 # cells that CellBender did not analyze keep their raw counts
@@ -158,6 +165,7 @@ adata.layers[LAYER] = corrected
 summary = pd.DataFrame(summary, columns=[
     'batch', 'raw_file', 'n_cells', 'n_cells_not_in_raw_file', 'n_cells_not_analyzed',
     'n_cells_called', 'median_cell_probability', 'counts_raw', 'counts_corrected', 'fraction_removed',
+    'cellbender_args',
 ])
 logging.info(f'Summary per batch:\n{summary.to_string()}')
 Path(output_summary).parent.mkdir(parents=True, exist_ok=True)
