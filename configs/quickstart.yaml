@@ -3,8 +3,8 @@
 # =============================================================================
 
 # Note: relative paths must be relative to the project root, not the directory of the config file.
-output_dir: /fs/scratch/PAS3328/michaeldavidson/scAtlasTb_outputs/quickstart/out   # large/intermediate files
-images: /fs/scratch/PAS3328/michaeldavidson/scAtlasTb_outputs/quickstart/images    # plots and smaller outputs
+output_dir: /fs/scratch/PDE0105/count2atlas/scAtlasTb_quickstart/out   # large/intermediate files
+images: /fs/scratch/PDE0105/count2atlas/scAtlasTb_quickstart/images    # plots and smaller outputs
 
 use_gpu: false
 env_mode: local
