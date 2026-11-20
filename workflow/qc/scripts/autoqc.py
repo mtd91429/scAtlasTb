@@ -57,10 +57,7 @@ sctk.calculate_qc(
     flags = {
         "mito": r"(?i)^MT-",
         "ribo": r"(?i)^RP[LS]",
-        # hemoglobin genes only: a bare ^HB also matches HBEGF, HBP1 and
-        # HBS1L (Hbegf/Hbp1/Hbs1l in mouse), which are not hemoglobins and
-        # are expressed outside erythroid cells
-        "hb": r"(?i)^HB[ABDEGMQZ](?![A-Z]{2})"
+        "hb": r"(?i)^HB[ABDEGMQZ][0-9]?$"
     },
 )
 
