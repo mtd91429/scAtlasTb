@@ -36,6 +36,11 @@ def get_mem_mb(attempt, profile, factor=2):
     return max(1_000, int(mem_mb // factor))
 
 
+def scrublet_profile(wildcards):
+    """Resource profile of a Scrublet job: GPU only when the dataset runs it on the GPU, as its environment does."""
+    return 'gpu' if mcfg.get_from_parameters(wildcards, 'use_gpu', default=False) else 'cpu'
+
+
 rule scrublet:
     input:
         zarr=lambda wildcards: mcfg.get_input_file(**wildcards),
@@ -53,10 +58,10 @@ rule scrublet:
             no_gpu=not mcfg.get_from_parameters(wildcards, 'use_gpu', default=False)
         )
     resources:
-        partition=lambda w, attempt: mcfg.get_resource(profile='gpu',resource_key='partition', attempt=attempt),
-        qos=lambda w, attempt: mcfg.get_resource(profile='gpu',resource_key='qos', attempt=attempt),
-        gpu=lambda w, attempt: mcfg.get_resource(profile='gpu',resource_key='gpu', attempt=attempt),
-        mem_mb=lambda w, attempt: get_mem_mb(attempt=attempt, profile='gpu'),
+        partition=lambda w, attempt: mcfg.get_resource(profile=scrublet_profile(w), resource_key='partition', attempt=attempt),
+        qos=lambda w, attempt: mcfg.get_resource(profile=scrublet_profile(w), resource_key='qos', attempt=attempt),
+        gpu=lambda w, attempt: mcfg.get_resource(profile=scrublet_profile(w), resource_key='gpu', attempt=attempt),
+        mem_mb=lambda w, attempt: get_mem_mb(attempt=attempt, profile=scrublet_profile(w)),
     script:
         '../scripts/scrublet.py'
 
