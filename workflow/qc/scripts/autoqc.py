@@ -65,11 +65,36 @@ logging.info('Determine parameters for scAutoQC...')
 logging.info(f'\n{metrics_params}')
 
 logging.info('Calculate cell-wise QC...')
-sctk.cellwise_qc(
-    adata,
-    metrics=metrics_params,
-    **gaussian_kwargs,
-)
+# Fit on the barcodes that have counts in this layer only. A barcode without counts (for
+# example a droplet that ambient-RNA removal emptied) has percentages of 0/0 = NaN, and
+# sctk's fit_gaussian builds its evaluation grid from x.min() and x.max(): a single NaN
+# makes the grid NaN, no range is found, and the metric silently falls back to its bound
+# (percent_mito: its max, 50). Barcodes without counts fail QC.
+has_counts = adata.obs['n_counts'].to_numpy() > 0
+n_without_counts = int((~has_counts).sum())
+if n_without_counts > 0:
+    logging.info(
+        f'{n_without_counts} of {adata.n_obs} barcodes have no counts; '
+        'fitting on the other barcodes, and these fail QC'
+    )
+if has_counts.any():
+    fit_data = ad.AnnData(obs=adata.obs.loc[has_counts].copy())
+    sctk.cellwise_qc(
+        fit_data,
+        metrics=metrics_params,
+        **gaussian_kwargs,
+    )
+    adata.uns['scautoqc_ranges'] = fit_data.uns['scautoqc_ranges']
+    passed = np.zeros(adata.n_obs, dtype=bool)
+    passed[has_counts] = fit_data.obs['cell_passed_qc'].to_numpy(dtype=bool)
+    adata.obs['cell_passed_qc'] = passed
+else:
+    logging.warning('No barcode has counts; scAutoQC falls back to the metric bounds')
+    sctk.cellwise_qc(
+        adata,
+        metrics=metrics_params,
+        **gaussian_kwargs,
+    )
 
 adata.uns['scautoqc_ranges'] = adata.uns['scautoqc_ranges'].astype('float32')
 logging.info(f"\n{adata.uns['scautoqc_ranges']}")
